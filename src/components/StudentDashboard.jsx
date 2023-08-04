@@ -12,11 +12,18 @@ const StudentDashboard = () => {
 
   const handleSave = () => {
     // Transpose the aspects to convert row-based to column-based and vice versa
-    const transposedStudents = Array.from({ length: 4 }, (_, aspectIndex) => ({
-      aspects: students.map((student) => student.aspects[aspectIndex + 1]),
-    }));
+    // const transposedStudents = Array.from({ length: 4 }, (_, aspectIndex) => ({
+    //   aspects: students.map((student) => student.aspects[aspectIndex + 1]),
+    // }));
 
-    const jsonContent = JSON.stringify(transposedStudents, null, 2);
+    const transposedData = Array.from({ length: 4 }, (_, aspectIndex) => {
+      const aspects = students.map((student, studentIndex) => ({
+        [`mahasiswa_${studentIndex + 1}`]: student.aspects[aspectIndex + 1],
+      }));
+      return { [`aspek_penilaian_${aspectIndex + 1}`]: aspects };
+    });
+
+    const jsonContent = JSON.stringify(transposedData, null, 2);
     const blob = new Blob([jsonContent], { type: 'application/json' });
     saveAs(blob, 'transposed_students_scores.json');
   };
